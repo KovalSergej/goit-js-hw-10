@@ -1,23 +1,37 @@
 const themeSwitchRef = document.querySelector('.theme-switch__toggle');
 const bodyRef = document.querySelector('body');
-const statusThemeSwitcher = localStorage.getItem('theme');
+let statusThemeSwitcher = localStorage.getItem('theme'); // Если воспользуюсь этим, то переключатель сработает один раз и потом будет неактивен. Не могу понять почему.
+const Theme = {
+  LIGHT: 'light-theme',
+  DARK: 'dark-theme',
+};
 
 themeSwitchRef.addEventListener('change', themeSwitcher);
+console.dir(themeSwitchRef.checked);
 
 if (localStorage.getItem('theme') === null) {
-    localStorage.setItem('theme', 'light-theme');
-    bodyRef.classList.add("light-theme");
-  }
-
-function themeSwitcher() {
-  if (localStorage.getItem('theme') === 'light-theme') {
-    localStorage.setItem('theme', 'dark-theme');
-    bodyRef.classList.remove("light-theme");
-    bodyRef.classList.add("dark-theme");
+  localStorage.setItem('theme', Theme.LIGHT);
+  bodyRef.classList.add(Theme.LIGHT);
+  themeSwitchRef.checked = false;
+} else {
+  bodyRef.className = localStorage.getItem('theme');
+  if (localStorage.getItem('theme') === Theme.LIGHT) {
+    themeSwitchRef.checked = false;
   } else {
-    localStorage.setItem('theme', 'light-theme');
-    bodyRef.classList.remove("dark-theme");
-    bodyRef.classList.add("light-theme");
+    themeSwitchRef.checked = true;
   }
 }
 
+function themeSwitcher() {
+  if (localStorage.getItem('theme') === Theme.LIGHT) {
+    localStorage.setItem('theme', Theme.DARK);
+    bodyRef.classList.remove(Theme.LIGHT);
+    bodyRef.classList.add(Theme.DARK);
+    themeSwitchRef.checked = true;
+  } else if (localStorage.getItem('theme') === Theme.DARK) {
+    localStorage.setItem('theme', Theme.LIGHT);
+    bodyRef.classList.remove(Theme.DARK);
+    bodyRef.classList.add(Theme.LIGHT);
+    themeSwitchRef.checked = false;
+  }
+}
